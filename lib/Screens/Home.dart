@@ -34,8 +34,9 @@ class Home extends StatelessWidget {
                 ],
               ),
             ),
-            Divider(thickness: 20, indent: 20, endIndent: 20,),
+            Divider(thickness: 3, indent: 20, endIndent: 20,),
             Container(
+              padding: EdgeInsets.all(25),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -58,6 +59,7 @@ class Home extends StatelessWidget {
                 ),
               ),
             Container(
+              padding: EdgeInsets.all(25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
