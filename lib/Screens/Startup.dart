@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yoga_app/Screens/rUready.dart';
 
 class Startup extends StatefulWidget {
   const Startup({super.key});
@@ -11,9 +12,12 @@ class _StartupState extends State<Startup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: ElevatedButton(onPressed: (){}, child: Container(
+      floatingActionButton: ElevatedButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>rUready()));
+      }, child: Container(
           padding: EdgeInsets.symmetric(horizontal: 30 ,vertical: 10),
-          child: Text("START" ,style: TextStyle(fontSize: 20),)),),
+          child: Text("START" ,style: TextStyle(fontSize: 20),))
+        ,),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
