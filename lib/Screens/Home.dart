@@ -1,7 +1,4 @@
 //Main Screen page
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yoga_app/Screens/Startup.dart';
 import 'package:yoga_app/Widgets/CustomAppBar.dart';
