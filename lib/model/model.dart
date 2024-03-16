@@ -18,7 +18,8 @@ class YogaModel {
     YogaModel.IDName,
     YogaModel.SecondsOrNot,
     YogaModel.YogaName,
-    YogaModel.ImageName
+    YogaModel.ImageName,
+    YogaModel.SecondsOrTimes
   ];
 }
 
@@ -26,6 +27,7 @@ class Yoga {
   final int? id;
   final bool Seconds;
   final String YogaTitle;
+  final int? YogaKey_WorkOuts;
   final String YogaImgUrl;
   final String SecondsOrTimes;
 
@@ -33,15 +35,17 @@ class Yoga {
       {this.id,
       required this.Seconds,
       required this.YogaImgUrl,
+        required this.YogaKey_WorkOuts,
       required this.YogaTitle,
         required this.SecondsOrTimes
       });
 
-  Yoga copy({int? id, bool? Seconds, String? YogaTitle, String? YogaImgUrl, String? SecondsOrTimes}) {
+  Yoga copy({int? id, bool? Seconds, String? YogaTitle, String? YogaImgUrl,int? YogaKey_WorkOuts, String? SecondsOrTimes}) {
     return Yoga(
         id: id ?? this.id,
         Seconds: Seconds ?? this.Seconds,
         YogaImgUrl: YogaImgUrl ?? this.YogaImgUrl,
+        YogaKey_WorkOuts: YogaKey_WorkOuts?? this.YogaKey_WorkOuts,
         YogaTitle: YogaTitle ?? this.YogaTitle,
         SecondsOrTimes: SecondsOrTimes ?? this.SecondsOrTimes
     );
@@ -52,6 +56,7 @@ class Yoga {
         id: json[YogaModel.IDName] as int?,
         Seconds: json[YogaModel.SecondsOrNot] == 1,
         YogaImgUrl: json[YogaModel.ImageName] as String,
+        YogaKey_WorkOuts: json[YogaModel.YogaKeyWorkOuts] as int?,
         YogaTitle: json[YogaModel.YogaName] as String,
         SecondsOrTimes: json[YogaModel.YogaName] as String
     );
@@ -61,9 +66,9 @@ class Yoga {
     return {
       YogaModel.IDName: id,
       YogaModel.SecondsOrNot: Seconds ? 1 : 0,
+      YogaModel.YogaKeyWorkOuts : YogaKey_WorkOuts,
       YogaModel.YogaName: YogaTitle,
       YogaModel.ImageName: YogaImgUrl,
-      YogaModel.SecondsOrTimes: SecondsOrTimes
     };
   }
 }

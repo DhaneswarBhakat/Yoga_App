@@ -1,23 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:yoga_app/Screens/rUready.dart';
+import 'package:yoga_app/model/model.dart';
+import 'package:yoga_app/services/yogadb.dart';
 
 class Startup extends StatefulWidget {
-  const Startup({super.key});
+  String Yogakey;
+  YogaSummary yogaSum;
+  Startup({required this.Yogakey, required this.yogaSum});
 
   @override
-  State<Startup> createState() => _StartupState();
+  _StartupState createState() => _StartupState();
 }
 
 class _StartupState extends State<Startup> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ReadAllYoga();
+  }
+
+  late List<Yoga> AllYogaWorkOuts;
+  bool isLoading =  true;
+  Future ReadAllYoga() async {
+    this.AllYogaWorkOuts =
+    await YogaDatabase.instance.readAllYoga(widget.yogaSum.YogaWorkOutName);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: ElevatedButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>rUready()));
-      }, child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 30 ,vertical: 10),
-          child: Text("START" ,style: TextStyle(fontSize: 20),))
-        ,),
+    return isLoading ? Scaffold(body: Container(),) : Scaffold(
+      floatingActionButton: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => rUready(YogaTableName: widget.yogaSum.YogaWorkOutName,)));
+        },
+        child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            child: Text(
+              "START",
+              style: TextStyle(fontSize: 20),
+            )),
+      ),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -25,9 +52,9 @@ class _StartupState extends State<Startup> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               collapseMode: CollapseMode.parallax,
-              title: Text("Yoga"),
+              title: Text(widget.yogaSum.YogaWorkOutName),
               background: Image.network(
-                "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=920&q=80",
+                widget.yogaSum.BackImg.toString(),
                 fit: BoxFit.cover,
               ),
             ),
@@ -44,8 +71,8 @@ class _StartupState extends State<Startup> {
                   Row(
                     children: [
                       Text(
-                        "16 Mins || 26  Workouts",
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        "${widget.yogaSum.TimeTaken} Mins || ${widget.yogaSum.TotalNoOfWork} Workouts",
+                        style: TextStyle(fontWeight: FontWeight.w400),
                       )
                     ],
                   ),
@@ -56,26 +83,27 @@ class _StartupState extends State<Startup> {
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       separatorBuilder: (context, index) => Divider(
-                            thickness: 2,
-                          ),
+                        thickness: 2,
+                      ),
+
                       itemBuilder: (context, index) => ListTile(
-                            leading: Container(
-                                margin: EdgeInsets.only(right: 20),
-                                child: Image.network(
-                                  "https://i.pinimg.com/originals/02/28/74/0228749d03812fc95700955e1a05d42e.gif",
-                                  fit: BoxFit.cover,
-                                )),
-                            title: Text(
-                              "Yoga $index",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
-                            ),
-                            subtitle: Text(
-                              (index % 2 == 0) ? "00:20" : "x20",
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                      itemCount: 10)
+                        leading: Container(
+                            margin: EdgeInsets.only(right: 20),
+                            child: Image.network(
+                              AllYogaWorkOuts[index].YogaImgUrl,
+                              fit: BoxFit.cover,
+                            )),
+                        title: Text(
+                          AllYogaWorkOuts[index].YogaTitle,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        subtitle: Text(
+                          AllYogaWorkOuts[index].Seconds ? "00:${AllYogaWorkOuts[index].SecondsOrTimes}" : "x${AllYogaWorkOuts[index].SecondsOrTimes}",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      itemCount: AllYogaWorkOuts.length)
                 ],
               ),
             ),

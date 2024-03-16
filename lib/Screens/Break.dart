@@ -1,15 +1,22 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart ';
+import 'package:yoga_app/Screens/WorkOutDat.dart';
+import 'package:yoga_app/model/model.dart';
 import 'package:provider/provider.dart';
 
 class BreakTime extends StatelessWidget {
-  const BreakTime({super.key});
+  List<Yoga> ListOfYoga;
+  int yogaindex;
+  BreakTime({
+    required this.ListOfYoga,
+    required this.yogaindex
+  });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<TimerModelSec>(
-      create: (context) => TimerModelSec(context),
+      create: (context) => TimerModelSec(context, ListOfYoga, yogaindex),
       child: Scaffold(
           body: Container(
         height: MediaQuery.of(context).size.height,
@@ -81,7 +88,7 @@ class BreakTime extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: Text(
-                    "Next: Anulom Vilom",
+                    "Next: ${ yogaindex >= ListOfYoga.length-1 ? "FINISH" : ListOfYoga[yogaindex].YogaTitle}EEE",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ))
@@ -93,19 +100,19 @@ class BreakTime extends StatelessWidget {
 }
 
 class TimerModelSec with ChangeNotifier {
-  TimerModelSec(context) {
-    MyTimerSec(context);
+  TimerModelSec(context, List<Yoga> ListOfYoga , int yogaindex) {
+    MyTimerSec(context, ListOfYoga, yogaindex);
   }
-  int countdown = 20;
+  int countdown = 3;
 
-  MyTimerSec(context) async {
+  MyTimerSec(context,List<Yoga> ListOfYoga , int yogaindex) async {
     Timer.periodic(Duration(seconds: 1), (timer) {
       countdown--;
       notifyListeners();
       if (countdown == 0) {
         timer.cancel();
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => BreakTime()));
+            context, MaterialPageRoute(builder: (context) => WorkOutDat(ListOfYoga: ListOfYoga, yogaindex: yogaindex)));
       }
     });
   }

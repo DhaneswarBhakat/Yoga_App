@@ -1,16 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:yoga_app/model/model.dart';
+import 'package:yoga_app/services/yogadb.dart';
 import 'package:provider/provider.dart';
 import 'package:yoga_app/Screens/WorkOutDat.dart';
 
 class rUready extends StatelessWidget {
-  const rUready({Key? key}) : super(key: key);
+  String YogaTableName;
+  rUready({required this.YogaTableName});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<TimerModel>(
-      create: (context) => TimerModel(context),
+      create: (context) => TimerModel(context, YogaTableName: YogaTableName),
       child: Scaffold(
         body: Center(
           child: Container(
@@ -44,9 +47,9 @@ class rUready extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 15),
                       child: Text(
-                        "Next: Anulom Vilom",
+                        "Tip: Breath Slowly While Doing Streching Yoga,",
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: 13, fontWeight: FontWeight.bold),
                       ),
                     ))
               ],
@@ -59,11 +62,13 @@ class rUready extends StatelessWidget {
 }
 
 class TimerModel with ChangeNotifier {
-  TimerModel(context) {
+  String YogaTableName;
+  TimerModel(context,{required this.YogaTableName}) {
+    FetchAllYoga(YogaTableName);
     MyTimer(context);
   }
   int countdown = 5;
-
+  late List<Yoga> AllYoga;
   MyTimer(context) async {
     Timer.periodic(Duration(seconds: 1), (timer) {
       countdown--;
@@ -71,9 +76,18 @@ class TimerModel with ChangeNotifier {
         timer.cancel();
         timer.cancel();
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => WorkOutDat()));
+            context, MaterialPageRoute(builder: (context) => WorkOutDat(ListOfYoga: AllYoga, yogaindex: 0,)));
       }
       notifyListeners();
     });
+  }
+
+  Future<List<Yoga>> FetchAllYoga(String yogaTableName) async{
+
+    await YogaDatabase.instance.readAllYogaSum();
+    AllYoga = await YogaDatabase.instance.readAllYoga(yogaTableName);
+    print(AllYoga.length);
+    notifyListeners();
+    return AllYoga;
   }
 }
