@@ -75,7 +75,7 @@ class TimerModel with ChangeNotifier {
       if (countdown == 0) {
         timer.cancel();
         timer.cancel();
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => WorkOutDat(ListOfYoga: AllYoga, yogaindex: 0,)));
       }
       notifyListeners();

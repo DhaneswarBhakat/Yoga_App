@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 class BreakTime extends StatelessWidget {
   List<Yoga> ListOfYoga;
   int yogaindex;
+
+
   BreakTime({
     required this.ListOfYoga,
     required this.yogaindex
@@ -105,13 +107,13 @@ class TimerModelSec with ChangeNotifier {
   }
   int countdown = 3;
 
-  MyTimerSec(context,List<Yoga> ListOfYoga , int yogaindex) async {
+  MyTimerSec(context, List<Yoga> ListOfYoga , int yogaindex) async {
     Timer.periodic(Duration(seconds: 1), (timer) {
       countdown--;
       notifyListeners();
       if (countdown == 0) {
         timer.cancel();
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => WorkOutDat(ListOfYoga: ListOfYoga, yogaindex: yogaindex)));
       }
     });

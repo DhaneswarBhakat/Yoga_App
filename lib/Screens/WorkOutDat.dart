@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:yoga_app/Screens/Break.dart';
 import 'package:yoga_app/Screens/rUready.dart';
 import 'package:yoga_app/model/model.dart';
-import 'package:yoga_app/Screens/WorkOutDat.dart';
+import 'package:yoga_app/services/yogadb.dart';
 
 class WorkOutDat extends StatelessWidget {
   List<Yoga> ListOfYoga;
@@ -114,6 +114,7 @@ class WorkOutDat extends StatelessWidget {
                                           builder: (context) => BreakTime(
                                               ListOfYoga: ListOfYoga,
                                               yogaindex: yogaindex - 1)));
+                                  // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WorkOutDet(ListOfYoga: ListOfYoga, yogaindex: yogaindex-1)));
                                 },
                                 child: Text(
                                   "Previous",
@@ -184,7 +185,14 @@ class WorkOutDat extends StatelessWidget {
                             height: 30,
                           ),
                           OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WorkOutDat(
+                                            ListOfYoga: ListOfYoga,
+                                            yogaindex: 0)));
+                              },
                               child: Container(
                                 width: 180,
                                 child: Text(
@@ -194,7 +202,9 @@ class WorkOutDat extends StatelessWidget {
                                 ),
                               )),
                           OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                               child: Container(
                                 width: 180,
                                 child: Text(
@@ -239,11 +249,11 @@ class TimerModelSec with ChangeNotifier {
 
   MyTimerSec(context, List<Yoga> ListOfYoga, int yogaindex) async {
     Timer.periodic(Duration(seconds: 1), (timer) {
-      countdown--;
+      visible ? countdown + 0 : countdown--;
       notifyListeners();
       if (countdown == 0) {
         timer.cancel();
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => BreakTime(
