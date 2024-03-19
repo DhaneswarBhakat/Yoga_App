@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
+
+
   AnimationController animationController;
   Animation colorsTween, homeTween, yogaTween, iconTween,drawerTween;
   Function()? onPressed;
@@ -12,7 +14,7 @@ class CustomAppBar extends StatelessWidget {
     required this.homeTween,
     required this.iconTween,
     required this.onPressed,
-    required this.yogaTween,
+    required this.yogaTween
   });
 
   @override
@@ -47,13 +49,12 @@ class CustomAppBar extends StatelessWidget {
             ],
           ),
           actions: [
-            Icon(Icons.notifications , color: iconTween.value,),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.black,
-              ),
-            )
+            IconButton(icon : Icon(Icons.notifications) ,onPressed: (){
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("No New Notifications"),
+              ));
+            }, color: iconTween.value,),
+
           ],
         ),
       ),
